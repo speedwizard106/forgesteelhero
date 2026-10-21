@@ -135,13 +135,15 @@ export const HeroListPage = (props: Props) => {
 										<Upload
 											style={{ width: '100%' }}
 											accept='.drawsteel-hero,.ds-hero'
+											multiple={true}
 											showUploadList={false}
 											beforeUpload={file => {
-												file
+												void file
 													.text()
-													.then(json => {
-														const hero = JSON.parse(json) as Hero;
-														props.importHero(hero, currentTab);
+													.then(json => JSON.parse(json) as Hero)
+													.then(hero => props.importHero(hero, currentTab))
+													.catch(error => {
+														console.error('Failed to import hero file:', file.name, error);
 													});
 												return false;
 											}}
